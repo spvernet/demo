@@ -1,0 +1,4 @@
+
+hello_world:
+  path: /helloworld
+  controller: App\Infrastructure\Controller\HelloWorldController::hello
