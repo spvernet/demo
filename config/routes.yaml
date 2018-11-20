@@ -1,4 +1,11 @@
 
+user_exist:
+  path: /user/{username}
+  controller: App\Infrastructure\Controller\UserController::userExist
+  defaults:   { username: "" }
+  methods: [GET]
+
 user_validation:
   path: /user
   controller: App\Infrastructure\Controller\UserController::userValidation
+  methods: [POST]

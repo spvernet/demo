@@ -13,11 +13,31 @@ class UserRepository implements UserRepositoryManagerInterface
         ['id'=>3, 'username'=> 'test3', 'password'=>'', 'name' => 'Nil', 'surname'=> 'Marti'],
     ];
 
+
+
+    public function exist(string $username) {
+        foreach (self::USERS_INFO as $u) {
+            if ($u['username'] == $username){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @param string $username
      * @param string $password
      */
     public function getUserInfo(string $username, string $password){
+        $result = null;
+        foreach (self::USERS_INFO as $u){
+            if (($u['username'] == $username) && ($u['password'] == $password)){
+                $result = $u;
+                break;
+            }
+        }
+
+        return $result;
 
 
     }
