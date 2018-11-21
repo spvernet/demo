@@ -54,4 +54,43 @@ class UserValidationTest extends TestCase
         $this->assertEquals(AbstractOutput::CODE_NOT_FOUND, $response['metadata'][0]['code']);
     }
 
+    public function testUserFound()
+    {
+
+        $user = [   'id'=>2,
+            'username'=> 'test2',
+            'password'=>password_hash('987654321', PASSWORD_DEFAULT),
+            'name' => 'Pol',
+            'surname'=> 'Garcia'
+        ];
+
+        $repository = $this->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getUserInfo'])
+            ->getMock();
+
+        $repository
+            ->expects($this->once())
+            ->method('getUserInfo')
+            ->willReturn($user)
+        ;
+
+        $request = new UserValidationRequest('a','b');
+        $userValidation = new UserValidationUseCase(
+            $request,
+            $repository,
+            new UserValidationOutput(),
+            new Logger()
+        );
+
+        /** @var JsonResponse $result */
+        $result = $userValidation->execute();
+        $response = json_decode($result->getContent(), true);
+
+        $this->assertEquals([],$response['metadata']);
+        $this->assertEquals( 2, $response['data']['id']);
+        $this->assertEquals( 'Pol', $response['data']['name']);
+        $this->assertEquals( 'Garcia', $response['data']['surname']);
+    }
+
 }
