@@ -6,6 +6,7 @@ use App\Domain\Core\AbstractOutput;
 use App\Domain\Core\AbstractUsecase;
 use App\Domain\Manager\UserRepositoryManagerInterface;
 use App\Infrastructure\Output\UserValidationOutput;
+use Psr\Log\LoggerInterface;
 
 class UserValidationUseCase extends AbstractUsecase
 {
@@ -19,19 +20,25 @@ class UserValidationUseCase extends AbstractUsecase
     /** @var UserValidationOutput  */
     protected $output;
 
+    protected $logger;
+
     public function __construct(UserValidationRequest $userValidationRequest,
                                 UserRepositoryManagerInterface $repository,
-                                UserValidationOutput $output)
+                                UserValidationOutput $output,
+                                LoggerInterface $logger
+    )
     {
         $this->userValidationRequest = $userValidationRequest;
         $this->repository = $repository;
         $this->output = $output;
+        $this->logger = $logger;
     }
 
     public function execute (){
 
 
         if (!$this->userValidationRequest->isValid()) {
+            $this->logger->error('field or value field not allowed', ['user.validation']);
             $this->output->addError('field or value field not allowed', 'user.validation', AbstractOutput::CODE_BAD_REQUEST);
             return $this->output->execute();
         }
@@ -42,6 +49,7 @@ class UserValidationUseCase extends AbstractUsecase
             );
 
         if (is_null($user)) {
+            $this->logger->error('User or password incorrect',['user.validation']);
             $this->output->addError('User or password incorrect','user.validation', AbstractOutput::CODE_NOT_FOUND);
             return $this->output->execute();
         }

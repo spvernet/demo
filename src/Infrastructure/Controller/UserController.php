@@ -9,23 +9,25 @@ use App\Domain\Usecase\UserValidation\UserValidationUseCase;
 use App\Infrastructure\Output\UserExistOutput;
 use App\Infrastructure\Output\UserValidationOutput;
 use App\Infrastructure\Repository\inMemory\UserRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserController
 {
 
-    public function userExist(Request $request, UserRepository $userRepository)
+    public function userExist(Request $request, UserRepository $userRepository, LoggerInterface $logger)
     {
         $usecase = new UserExistUseCase(
             $request->get('username'),
             $userRepository,
-            new UserExistOutput()
+            new UserExistOutput(),
+            $logger
         );
 
         return $usecase->execute();
     }
 
-    public function userValidation(Request $request, UserRepository $userRepository)
+    public function userValidation(Request $request, UserRepository $userRepository, LoggerInterface $logger)
     {
         $messageArray = json_decode($request->getContent(), true);
         $username = $messageArray['username'] ?? "";
@@ -36,7 +38,8 @@ class UserController
         $usecase = new UserValidationUseCase(
             $command,
             $userRepository,
-            new UserValidationOutput()
+            new UserValidationOutput(),
+            $logger
         );
 
         return $usecase->execute();

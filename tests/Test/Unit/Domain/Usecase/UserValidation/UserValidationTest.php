@@ -10,6 +10,7 @@ use App\Infrastructure\Output\UserValidationOutput;
 use App\Infrastructure\Repository\inMemory\UserRepository;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Log\Logger;
 
 class UserValidationTest extends TestCase
 {
@@ -41,7 +42,9 @@ class UserValidationTest extends TestCase
         $userValidation = new UserValidationUseCase(
             $request,
             $repository,
-            new UserValidationOutput());
+            new UserValidationOutput(),
+            new Logger()
+        );
 
         /** @var JsonResponse $result */
         $result = $userValidation->execute();
