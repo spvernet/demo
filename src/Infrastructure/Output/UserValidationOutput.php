@@ -4,35 +4,23 @@
 namespace App\Infrastructure\Output;
 
 
+use App\Domain\Core\AbstractOutput;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class UserValidationOutput
+class UserValidationOutput extends AbstractOutput
 {
 
-    public function __construct()
+    public function execute(array $data = null)
     {
-
-    }
-
-    public function execute(array $data = array())
-    {
-/*        if ($this->hasErrors()) {
-            return $this->getErrorResponse();
+        $this->init();
+        if (is_array($data) && array_key_exists('errors' , $data)) {
+            return new JsonResponse($data, self::CODE_BAD_REQUEST);
+        } elseif ($this->hasErrors()) {
+            $error = $this->getErrors();
+            return new JsonResponse($error, $error['metadata'][0]['code']);
         }
-
-        if ($this->getTotalCount($data) <= 0) {
-
-        }*/
-
-        try {
-            //Build document
-        } catch (\Exception $e) {
-            return new JsonResponse(/* ERROR*/);
-        }
-
-        $outputResponse = new JsonResponse(/* OK*/ );
-
-        return $outputResponse;
+        $this->output['data'] = ["id"=>$data['id'], "name"=>$data['name'], "surname"=>$data['surname']];
+        return new JsonResponse($this->output);
     }
 
 

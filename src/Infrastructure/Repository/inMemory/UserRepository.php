@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Infrastructure\Repository;
+namespace App\Infrastructure\Repository\inMemory;
 
 
-use App\Domain\Manager\UserRepositoryManagerInterface;
+use App\Domain\Core\AbstractInMemoryRepository;
 
-class UserRepository implements UserRepositoryManagerInterface
+class UserRepository extends AbstractInMemoryRepository
 {
     /** @var array $user_info */
     private $user_info;

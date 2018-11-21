@@ -11,5 +11,7 @@ namespace App\Domain\Manager;
 
 interface UserRepositoryManagerInterface
 {
+    public function exist(string $username);
+
     public function getUserInfo(string $username, string $password);
 }

@@ -9,7 +9,9 @@
 namespace App\Domain\Core;
 
 
-class AbstractInMemoryRepository
+use App\Domain\Manager\UserRepositoryManagerInterface;
+
+abstract class AbstractInMemoryRepository implements UserRepositoryManagerInterface
 {
 
 }

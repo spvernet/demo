@@ -41,7 +41,7 @@ class UserValidationRequest implements Request
 
     public function isValid(): bool
     {
-        return true;
+        return (!empty($this->username) && !empty($this->password));
     }
 
 }
